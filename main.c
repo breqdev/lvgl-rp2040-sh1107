@@ -10,8 +10,8 @@
 
 #define ADDR 0x3C
 
-#define WIDTH 64
-#define HEIGHT 128
+#define WIDTH 128
+#define HEIGHT 64
 
 #define BUFFER_SIZE (WIDTH * HEIGHT)
 
@@ -105,11 +105,11 @@ void send_data(const uint8_t* data, size_t length) {
 void my_flush_cb(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* color_p) {
     printf("Flushing area x1=%02x x2=%02x y1=%02x y2=%02x\n", area->x1, area->x2, area->y1, area->y2);
 
-    uint8_t start_page = area->y1 >> 3;
-    uint8_t end_page = area->y2 >> 3;
+    uint8_t start_page = area->x1 >> 3;
+    uint8_t end_page = area->x2 >> 3;
 
-    uint8_t start_col = area->x1;
-    uint8_t end_col = area->x2 + 1;
+    uint8_t start_col = area->y1;
+    uint8_t end_col = area->y2 + 1;
 
     uint8_t transfer_size = end_col - start_col;
 
@@ -128,9 +128,9 @@ void my_flush_cb(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* col
 }
 
 void my_rounder_cb(lv_disp_drv_t* disp_drv, lv_area_t* area) {
-    area->y1 &= ~0x7;
-    area->y2 &= ~0x7;
-    area->y2 += 7;
+    area->x1 &= ~0x7;
+    area->x2 &= ~0x7;
+    area->x2 += 7;
 
     // area->y1 = 0;
     // area->y2 = HEIGHT - 1;
@@ -141,9 +141,9 @@ void my_rounder_cb(lv_disp_drv_t* disp_drv, lv_area_t* area) {
 
 void my_set_px_cb(lv_disp_drv_t* disp_drv, uint8_t* buf, lv_coord_t buf_w, lv_coord_t x, lv_coord_t y, lv_color_t color, lv_opa_t opa) {
 
-    uint16_t page = y >> 3;
-    uint16_t column = x;
-    uint8_t bit = y & 0x7;
+    uint16_t page = x >> 3;
+    uint16_t column = y;
+    uint8_t bit = x & 0x7;
 
     uint8_t mask = 1 << bit;
 
