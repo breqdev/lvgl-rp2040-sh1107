@@ -10,12 +10,15 @@ project(lvgl_rp2040_sh1107)
 pico_sdk_init()
 
 # rest of your project
+add_subdirectory(lvgl)
+
+
 add_executable(
     lvgl_rp2040_sh1107
     main.c
 )
 
-target_link_libraries(lvgl_rp2040_sh1107 pico_stdlib hardware_i2c)
+target_link_libraries(lvgl_rp2040_sh1107 pico_stdlib hardware_i2c lvgl)
 
 pico_add_extra_outputs(lvgl_rp2040_sh1107)
 
